@@ -48,6 +48,12 @@ bool isFrequentParkingNumberValid(int frequentParkingNumber) {
 
 
 double calculatePrice(string day, int arrivalHour, int hours, int frequentParkingNumber) {
+    // Check if the arrivalHour is between midnight and 8 am
+    if (arrivalHour >= 0 && arrivalHour < 8) {
+        cout << "Error: No parking is allowed between Midnight and 8 am.\n";
+        exit(0); // Terminate the program
+    }
+
     ParkingRate rate = rates[day];
     double price = 0.0;
 
@@ -69,6 +75,12 @@ double calculatePrice(string day, int arrivalHour, int hours, int frequentParkin
 }
 
 double calculateFairPrice(string day, int arrivalHour, int hours, int frequentParkingNumber) {
+    // Check if the arrivalHour is between midnight and 8 am
+    if (arrivalHour >= 0 && arrivalHour < 8) {
+        cout << "Error: No parking is allowed between Midnight and 8 am.\n";
+        exit(0); // Terminate the program
+    }
+
     ParkingRate rate = rates[day];
     double price = 0.0;
 
@@ -83,6 +95,7 @@ double calculateFairPrice(string day, int arrivalHour, int hours, int frequentPa
 
     return price;
 }
+
 
 int main() {
     double dailyTotal = 0.0;
