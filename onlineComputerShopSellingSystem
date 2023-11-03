@@ -1,0 +1,335 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <limits>
+
+// Structure to store item information
+struct Item {
+    std::string itemCode;
+    std::string description;
+    double price;
+};
+
+class Computer {
+public:
+    std::string caseCode;
+    std::string ramCode;
+    std::string mainHDDCode;
+    double basicComponentsPrice = 200.0;
+    std::vector<Item> additionalItems;
+    double totalPrice() {
+        double total = basicComponentsPrice;
+        for (const auto& item : additionalItems) {
+            total += item.price;
+        }
+        return total;
+    }
+    double applyDiscount() {
+        int additionalItemsCount = additionalItems.size();
+        double discount = 0.0;
+        if (additionalItemsCount == 1) {
+            discount = totalPrice() * 0.05;
+        }
+        else if (additionalItemsCount >= 2) {
+            discount = totalPrice() * 0.10;
+        }
+        return discount;
+    }
+};
+
+int main() {
+    std::cout << "Basic Component Cost added: $200\n\n";
+
+    // Create arrays of item information
+    Item cases[2] = {
+        {"A1", "Compact", 75.00},
+        {"A2", "Tower", 150.00}
+    };
+    Item rams[3] = {
+        {"B1", "8 GB", 79.99},
+        {"B2", "16 GB", 149.99},
+        {"B3", "32 GB", 299.99}
+    };
+    Item mainHDDs[3] = {
+        {"C1", "1 TB HDD", 49.99},
+        {"C2", "2 TB HDD", 89.99},
+        {"C3", "4 TB HDD", 129.99}
+    };
+
+    // Prompt the user to select one item from each category
+    std::string caseCode;
+    while (true) {
+        for (const auto& item : cases) {
+            std::cout << item.itemCode << " - " << item.description << " - $" << item.price << "\n";
+        }
+        std::cin >> caseCode;
+
+        // Check if the input is a newline character
+        if (caseCode != "A1" || caseCode != "A2") {
+            std::cout << "Invalid case code. Please select a valid case code.\n";
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
+            continue; // Skip to the next iteration of the loop
+        }
+    }
+
+
+    std::string ramCode;
+    while (true) {
+        for (const auto& item : rams) {
+            std::cout << item.itemCode << " - " << item.description << " - $" << item.price << "\n";
+        }
+        std::cin >> ramCode;
+
+        // Check if the input is a newline character
+        if (caseCode != "B1" || caseCode != "B2" || caseCode != "B3") {
+            std::cout << "Invalid RAM code. Please select a valid RAM code.\n";
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
+            continue; // Skip to the next iteration of the loop
+        }
+    }
+
+
+    std::string mainHDDCode;
+    while (true) {
+        for (const auto& item : mainHDDs) {
+            std::cout << item.itemCode << " - " << item.description << " - $" << item.price << "\n";
+        }
+        std::cin >> mainHDDCode;
+
+        // Check if the input is a newline character
+        if (caseCode != "C1" || caseCode != "C2" || caseCode != "C3") {
+            std::cout << "Invalid Main HDD code. Please select a valid Main HDD code.\n";
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
+            continue; // Skip to the next iteration of the loop
+        }
+    }
+
+
+    // Calculate the total price of the computer
+    Computer computer;
+    for (const auto& item : cases) {
+        if (item.itemCode == caseCode) {
+            computer.caseCode = item.itemCode;
+            computer.basicComponentsPrice += item.price; // Add the price of the case to the basicComponentsPrice
+            break;
+        }
+    }
+    for (const auto& item : rams) {
+        if (item.itemCode == ramCode) {
+            computer.ramCode = item.itemCode;
+            computer.basicComponentsPrice += item.price; // Add the price of the RAM to the basicComponentsPrice
+            break;
+        }
+    }
+    for (const auto& item : mainHDDs) {
+        if (item.itemCode == mainHDDCode) {
+            computer.mainHDDCode = item.itemCode;
+            computer.basicComponentsPrice += item.price; // Add the price of the Main HDD to the basicComponentsPrice
+            break;
+        }
+    }
+
+    // Task 2 - Ordering additional items
+
+    // Define items for each additional category
+    Item solidStateDrives[] = {
+        {"D1", "240 GB SSD", 59.99},
+        {"D2", "480 GB SSD", 119.99}
+    };
+
+    Item secondHDDs[] = {
+        {"E1", "1 TB HDD", 49.99},
+        {"E2", "2 TB HDD", 89.99},
+        {"E3", "4 TB HDD", 129.99}
+    };
+
+    Item opticalDrives[] = {
+        {"F1", "DVD/Blu-Ray Player", 50.00},
+        {"F2", "DVD/Blu-Ray Re-writer", 100.00}
+    };
+
+    Item operatingSystems[] = {
+        {"G1", "Standard Version", 100.00},
+        {"G2", "Professional Version", 175.00}
+    };
+
+    // Prompt the user to select any additional items they want to purchase
+    char choice;
+    std::cout << "Do you want to purchase any additional items? (y/n)\n";
+    std::cin >> choice;
+    while (choice == 'y') {
+        int category;
+        std::cout << "Select an additional item category:\n";
+        std::cout << "1 - Solid State Drive\n";
+        std::cout << "2 - Second Hard Disk Drive\n";
+        std::cout << "3 - Optical Drive\n";
+        std::cout << "4 - Operating System\n";
+        std::cin >> category;
+
+        bool validInput = false;
+
+        switch (category) {             //These warnings are about variables being declared in the switch statement without initializing them, but they shouldn't cause issues in this specific code. We can ignore these warnings in this context because the variables are properly initialized inside each case.
+        case 1:
+            // Solid State Drive
+            std::cout << "Select a Solid State Drive:\n";
+            std::string ssdItemCode;
+
+            while (true) {
+                for (const auto& item : solidStateDrives) {
+                    std::cout << item.itemCode << " - " << item.description << " - $" << item.price << "\n";
+                }
+                std::cin >> ssdItemCode;
+
+                for (const auto& item : solidStateDrives) {
+                    if (item.itemCode == ssdItemCode) {
+                        validInput = true;
+                        computer.additionalItems.push_back(item);
+                        break;
+                    }
+                }
+
+                if (validInput) {
+                    break; // Exit the loop if the input is valid
+                }
+                else {
+                    std::cout << "Invalid item code. Please select a valid item code.\n";
+                    std::cin.clear(); // Clear error flags
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
+                }
+            }
+            break;
+
+        case 2:
+            // Second Hard Disk Drive
+            std::cout << "Select a Second Hard Disk Drive:\n";
+            std::string secondHDDItemCode;
+
+            while (true) {
+                for (const auto& item : secondHDDs) {
+                    std::cout << item.itemCode << " - " << item.description << " - $" << item.price << "\n";
+                }
+                std::cin >> secondHDDItemCode;
+
+                for (const auto& item : secondHDDs) {
+                    if (item.itemCode == secondHDDItemCode) {
+                        validInput = true;
+                        computer.additionalItems.push_back(item);
+                        break;
+                    }
+                }
+
+                if (validInput) {
+                    break; // Exit the loop if the input is valid
+                }
+                else {
+                    std::cout << "Invalid item code. Please select a valid item code.\n";
+                    std::cin.clear(); // Clear error flags
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
+                }
+            }
+            break;
+
+        case 3:
+            // Optical Drive
+            std::cout << "Select an Optical Drive:\n";
+            std::string opticalDriveItemCode;
+
+            while (true) {
+                for (const auto& item : opticalDrives) {
+                    std::cout << item.itemCode << " - " << item.description << " - $" << item.price << "\n";
+                }
+                std::cin >> opticalDriveItemCode;
+
+                for (const auto& item : opticalDrives) {
+                    if (item.itemCode == opticalDriveItemCode) {
+                        validInput = true;
+                        computer.additionalItems.push_back(item);
+                        break;
+                    }
+                }
+
+                if (validInput) {
+                    break; // Exit the loop if the input is valid
+                }
+                else {
+                    std::cout << "Invalid item code. Please select a valid item code.\n";
+                    std::cin.clear(); // Clear error flags
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
+                }
+            }
+            break;
+
+        case 4:
+            // Operating System
+            std::cout << "Select an Operating System:\n";
+            std::string osItemCode;
+
+            while (true) {
+                for (const auto& item : operatingSystems) {
+                    std::cout << item.itemCode << " - " << item.description << " - $" << item.price << "\n";
+                }
+                std::cin >> osItemCode;
+
+                for (const auto& item : operatingSystems) {
+                    if (item.itemCode == osItemCode) {
+                        validInput = true;
+                        computer.additionalItems.push_back(item);
+                        break;
+                    }
+                }
+
+                if (validInput) {
+                    break; // Exit the loop if the input is valid
+                }
+                else {
+                    std::cout << "Invalid item code. Please select a valid item code.\n";
+                    std::cin.clear(); // Clear error flags
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
+                }
+            }
+            break;
+
+        default:
+            std::cout << "Invalid category. Please select a valid category.\n";
+            break;
+        }
+
+        // Ask if the user wants to add more additional items
+        std::cout << "Do you want to add more additional items? (y/n)\n";
+        std::cin >> choice;
+    }
+
+    // Task 3 - Offering discounts
+
+    double discount = computer.applyDiscount();
+    double totalDiscountedPrice = computer.totalPrice() - discount;
+
+    // Display the selected items and the total price after applying discounts
+    std::cout << "Selected items:\n";
+    std::cout << "Case: " << computer.caseCode << "\n";
+    std::cout << "RAM: " << computer.ramCode << "\n";
+    std::cout << "Main Hard Disk Drive: " << computer.mainHDDCode << "\n";
+    std::cout << "Additional Items:\n";
+    for (const auto& item : computer.additionalItems) {
+        std::cout << item.description << " - $" << item.price << "\n";
+    }
+    std::cout << "Total price before discount: $" << computer.totalPrice() << "\n";
+
+    if (discount > 0) {
+        std::cout << "You received a discount of $" << discount << "\n";
+        std::cout << "Total price after discount: $" << totalDiscountedPrice << "\n";
+    }
+    else {
+        std::cout << "No discount applied.\n";
+    }
+
+    return 0;
+}
+
+
+//References: https://quixoticacademy.blogspot.com/2020/08/o-level-computer-science-0478-prerelase.html
+            //https://www.youtube.com/watch?v=A_cg4td2YGU
+            //https://www.youtube.com/watch?v=lzedZQKjiN0
