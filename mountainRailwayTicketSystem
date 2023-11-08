@@ -1,0 +1,138 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+vector<string> DepartureTimes = { "09:00", "11:00", "13:00", "15:00" };
+vector<int> AvailableSeats = { 480, 480, 480, 480 };
+vector<int> CurrentPassengers = { 0, 0, 0, 0 };
+vector<double> TotalEarnings = { 0.0, 0.0, 0.0, 0.0 };
+vector<string> ReturnTimes = { "10:00", "12:00", "14:00", "16:00" };
+vector<int> ReturnSeats = { 480, 480, 480, 640 };
+vector<int> ReturnPassengers = { 0, 0, 0, 0 };
+vector<double> ReturnEarnings = { 0.0, 0.0, 0.0, 0.0 };
+
+void DisplayScreen() {
+    for (int i = 0; i < 4; i++) {
+        if (AvailableSeats[i] != 0) {
+            cout << "Trip No: " << i + 1 << " - Departure Time: " << DepartureTimes[i] << "- Seats available: " << AvailableSeats[i] << endl;
+        }
+        else {
+            cout << "Trip No: " << i + 1 << " - Departure Time: " << DepartureTimes[i] << "- Full!\n";
+        }
+        if (ReturnSeats[i] != 0) {
+            cout << "Trip No: " << i + 1 << " - Return Time: " << ReturnTimes[i] << "- Seats available: " << ReturnSeats[i] << endl;
+        }
+        else {
+            cout << "Trip No: " << i + 1 << " - Return Time: " << ReturnTimes[i] << "- Full!" << endl;
+        }
+    }
+}
+
+int main() {
+    DisplayScreen();
+
+    int PassengerCount = 0;
+    int DepartureTrip = 0;
+    int ReturnTrip = 0;
+    int FreeTickets = 0;
+    double TicketPrice = 25.0;
+    double TicketCost = 0.0;
+
+    string userChoice;
+    cout << "Do you want to buy ticket(s)? Enter Yes or No: ";
+    cin >> userChoice;
+    while (userChoice != "Yes" && userChoice != "No") {
+        cout << "Invalid Input! Enter Yes or No: ";
+        cin >> userChoice;
+    }
+    while (userChoice != "No") {
+        cout << "Enter Trip number for your chosen Departure time: ";
+        cin >> DepartureTrip;
+        while (DepartureTrip < 1 || DepartureTrip > 4) {
+            cout << "Error! Enter Trip number from (1, 2, 3, 4): ";
+            cin >> DepartureTrip;
+        }
+
+        cout << "\nReturn Times Available";
+        for (int j = DepartureTrip - 1; j < 4; j++) {
+            cout << "Trip No: " << j + 1 << " - Return Time: " << ReturnTimes[j] << " - Remaining Seats: " << ReturnSeats[j] << "\n";
+        }
+        cout << "\n";
+        cout << "Enter Trip number for your chosen Return time: ";
+        cin >> ReturnTrip;
+        while (ReturnTrip < DepartureTrip || ReturnTrip > 5) {
+            cout << "Error! Enter Trip number from the given list above: ";
+            cin >> ReturnTrip;
+        }
+
+        cout << "\n";
+        cout << "Enter number of passengers for trip: ";
+        cin >> PassengerCount;
+        while (PassengerCount <= 0) {
+            cout << "Error! Enter number greater than 0: ";
+            cin >> PassengerCount;
+        }
+        if (PassengerCount > AvailableSeats[DepartureTrip - 1] || PassengerCount > ReturnSeats[ReturnTrip - 1]) {
+            cout << "\nSeats not available for chosen times\n";
+            cout << "Please check the display below for available Seats =>\n";
+        }
+        else {
+            cout << "\nSeats Booked\n";
+            if (PassengerCount >= 10 && PassengerCount <= 80) {
+                FreeTickets = PassengerCount / 10;
+            }
+            else {
+                FreeTickets = 0;
+            }
+            TicketCost = (PassengerCount - FreeTickets) * TicketPrice;
+            cout << "Total price for two-way journey: $" << TicketCost * 2 << "\n";
+
+            CurrentPassengers[DepartureTrip - 1] += PassengerCount;
+            AvailableSeats[DepartureTrip - 1] -= PassengerCount;
+            TotalEarnings[DepartureTrip - 1] += TicketCost;
+
+            ReturnPassengers[ReturnTrip - 1] += PassengerCount;
+            ReturnSeats[ReturnTrip - 1] -= PassengerCount;
+            ReturnEarnings[ReturnTrip - 1] += TicketCost;
+        }
+        DisplayScreen();
+        cout << "Do you want to buy ticket(s)? Enter Yes or No: ";
+        cin >> userChoice;
+        while (userChoice != "Yes" && userChoice != "No") {
+            cout << "Invalid Input! Enter Yes or No: ";
+            cin >> userChoice;
+        }
+    }
+
+    double TotalIncome = 0.0;
+    int TotalRiders = 0;
+    string BusiestTrip = "";
+    int MostRiders = 0;
+
+    cout << "\nEnd of the Day\n\n";
+    for (int i = 0; i < 4; i++) {
+        cout << "Trip No: " << i + 1 << " - Departure Time: " << DepartureTimes[i] << " - Number of riders: " << CurrentPassengers[i] << " - Total earnings: $" << TotalEarnings[i] << "\n";
+        cout << "Trip No: " << i + 1 << " - Return Time: " << ReturnTimes[i] << " - Number of riders: " << ReturnPassengers[i] << " - Total earnings: $" << ReturnEarnings[i] << "\n";
+    }
+    for (int j = 0; j < 4; j++) {
+        TotalRiders += CurrentPassengers[j];
+        TotalIncome += (TotalEarnings[j] * 2);
+    }
+    for (int k = 0; k < 4; k++) {
+        if (CurrentPassengers[k] > MostRiders) {
+            MostRiders = CurrentPassengers[k];
+            BusiestTrip = DepartureTimes[k];
+        }
+        if (ReturnPassengers[k] > MostRiders) {
+            MostRiders = ReturnPassengers[k];
+            BusiestTrip = ReturnTimes[k];
+        }
+    }
+    cout << "Total earnings today: $" << TotalIncome << "\n";
+    cout << "Total riders today: " << TotalRiders << "\n";
+    cout << "The busiest trip today: " << BusiestTrip << "\n";
+    cin.ignore();
+    cin.get();
+    return 0;
+}
