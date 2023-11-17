@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+void calculateSlabOne(int unitArr[][3])
+{
+    for (int i = 0; i < 3; i++)
+    {
+        unitArr[0][i] = unitArr[0][i] * unitArr[1][0];  //multiplies each unit consumed in the slab by the cost per unit. Then stores the result back in the array
+    }
+    cout << "\nCost for Slab 1 is:\n";
+    for (int i = 0; i < 3; i++)
+    {
+        cout << unitArr[0][i] << "\t";
+    }
+    cout << "\n";
+}
+
+void calculateSlabThree(int unitArr[][3])
+{
+    for (int i = 0; i < 3; i++)
+    {
+        unitArr[0][i] = unitArr[0][i] * unitArr[1][0]; //multiplies each unit consumed in the slab by the cost per unit. Then stores the result back in the array
+    }
+    cout << "\nCost for Slab 3 is:\n";
+    for (int i = 0; i < 3; i++)
+    {
+        cout << unitArr[0][i] << "\t";
+    }
+    cout << "\n\n";
+}
+
+void calculateSlabTwo(int unitArr[][3])
+{
+    for (int i = 0; i < 3; i++)
+    {
+        unitArr[0][i] = unitArr[0][i] * unitArr[1][0]; //multiplies each unit consumed in the slab by the cost per unit. Then stores the result back in the array
+    }
+    cout << "\nCost for Slab 2 is:\n";
+    for (int i = 0; i < 3; i++)
+    {
+        cout << unitArr[0][i] << "\t";
+    }
+    cout << "\n\n";
+}
+
+int main()
+{
+    const int row = 2, column = 3;
+    int slabOne[row][column] = { {55, 65, 75}, {10} };
+    int slabTwo[row][column] = { {120, 150, 170}, {15} };
+    int slabThree[row][column] = { {210, 230, 240}, {20} };
+    int condition = 1, userInput;
+
+    while (condition)
+    {
+        cout << "My Student ID is XY12345678" << endl;
+        cout << "Enter your chocie " << endl;
+        cout << "Press 1 to display the cost of slab 1 and slab 2." << endl;
+        cout << "Press 2 to display the cost of slab 3." << endl;
+        cout << "Press any other key to exit." << endl;
+        cin >> userInput;
+
+        switch (userInput)
+        {
+        case 1:
+            calculateSlabOne(slabOne);
+            calculateSlabTwo(slabTwo);
+            break;
+        case 2:
+            calculateSlabThree(slabThree);
+            break;
+        default:
+            condition = 0;
+            break;
+        }
+    }
+    return 0;
+}
