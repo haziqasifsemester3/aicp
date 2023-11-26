@@ -1,0 +1,76 @@
+#include<iostream>
+using namespace std;
+
+class Hexagon {
+private:
+	int s;
+public:
+	void input(int side) {
+		s = side;
+	}
+	float calcArea() {
+		return 1.5 * 1.732 * s * s;
+	}
+	int calcPeri() {
+		return 6 * s;
+	}
+	int calcAngleSum() {
+		int a = 120;
+		return 6 * a;
+	}
+	double display() {
+		cout << "Area of Hexagon: " << calcArea() << endl;
+		cout << "Perimeter of Hexagon: " << calcPeri() << endl;
+		cout << "Sum of Angles of Hexagon: " << calcAngleSum() << endl;
+	}
+	};
+
+	class Square {
+	private:
+		int s;
+	public:
+		void input(int side) {
+			s = side;
+		}
+		double calcAreaSquare() {
+			return s * s;
+		}
+		double calcPeriSquare() {
+			return 4 * s;
+		}
+		double display() {
+			cout << "Area of Square: " << calcAreaSquare() << endl;
+			cout << "Perimeter of Square: " << calcPeriSquare() << endl;
+		}
+	};
+
+	int main()
+	{
+		Hexagon hex;
+		Square seq;
+		int choice;
+		int vuid = 7;
+		int sidehex = vuid;
+		int sideseq = vuid + 1;
+		bool check = true;
+		while (check)
+		{
+			cout << "Enter 1 to calculate area, perimeter and sum of angles of hexagon" << endl;
+			cout << "Enter 2 to calculate area and perimeter of square" << endl;
+			cout << "Press any other key to exit" << endl;
+			cin >> choice;
+			if (choice == 1) {
+				hex.input(sidehex);
+				hex.display();
+			}
+			else if (choice == 2) {
+				seq.input(sideseq);
+				seq.display();
+			}
+			else {
+				check = false;
+			}
+		}
+
+		return 0;
+	}
