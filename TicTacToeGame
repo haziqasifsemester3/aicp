@@ -5,6 +5,7 @@ char board[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 char turn = 'X';
 int row, column;
 bool draw = false;
+
 void display_board(){
 	system("cls");
 	cout << "\t\tTICK TACK GAME\t\t" << endl;
@@ -42,20 +43,22 @@ void player_turn(){
 			cout << "Invalid choice\n" << endl;
 			break;
 	}
-	if (turn == 'X' && board[row][column]!='X' && board[row][column]!='0'){
-		board[row][column]='X';
-		turn='0';
-	}
-	else if (turn == '0' && board[row][column]!='X' && board[row][column]!='0'){
-		board[row][column]='0';
-		turn='X';
-	}
-	else{
-		cout << "Box already filled!\nTry again!\n\n";
-		player_turn();
-	}
-	display_board();
+	if (turn == 'X' && board[row][column] != 'X' && board[row][column] != '0') {
+        board[row][column] = 'X';
+        turn = '0';
+        display_board();
+    }
+    else if (turn == '0' && board[row][column] != 'X' && board[row][column] != '0') {
+        board[row][column] = '0';
+        turn = 'X';
+        display_board();
+    }
+    else {
+        cout << "Box already filled!\nTry again!\n\n";
+        player_turn();
+    }
 }
+
 
 bool gameover(){
 	//Check win
@@ -78,10 +81,10 @@ bool gameover(){
 
 main(){
 	
-	while (gameover()){
 	display_board();
-	gameover();
-	}
+    while (gameover()) {
+        player_turn();
+    }
 	
 	if (turn=='X'&&draw==false)
 	cout << "Player 2 [0] Win!! Congradulations\n";
@@ -90,10 +93,3 @@ main(){
 	else
 	cout << "Game Draw!!\n";
 }
-
-/*References:
-Part 1: https://www.youtube.com/watch?v=69lxVMY5610&t=0s
-Part 2: https://www.youtube.com/watch?v=NqDoIydMww0&t=0s
-Part 3: https://www.youtube.com/watch?v=Ez1hwdLfMbo&t=0s
-Part 4: https://www.youtube.com/watch?v=CRB3ow8cq5Y&t=0s
-*/
