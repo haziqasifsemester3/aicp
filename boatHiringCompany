@@ -1,0 +1,111 @@
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+const int NUM_BOATS = 10;
+const int OPEN_TIME = 1000;
+const int CLOSE_TIME = 1700;
+
+// Function prototypes
+int calculateMoneyForOneBoat();
+int findNextAvailableBoat(int returnTimes[], int currentTime);
+void endOfDayReport(int moneyTaken[], float totalHoursHired[]);
+
+int main() {
+    int moneyTaken[NUM_BOATS] = {0};
+    int returnTimes[NUM_BOATS] = {0};
+    float totalHoursHired[NUM_BOATS] = {0};
+    int currentTime = OPEN_TIME;
+    char continueHiring;
+
+    do {
+        int boatNumber;
+        cout << "Enter the boat number (1-10) to hire: ";
+        cin >> boatNumber;
+        boatNumber -= 1; // Adjust for 0-based indexing
+
+        if (boatNumber >= 0 && boatNumber < NUM_BOATS) {
+            if (returnTimes[boatNumber] <= currentTime) {
+                int hireMoney = calculateMoneyForOneBoat();
+                if (hireMoney != -1) { // Valid hire
+                    moneyTaken[boatNumber] += hireMoney;
+                    totalHoursHired[boatNumber] += (hireMoney == 20) ? 1 : 0.5;
+                    int returnTime = currentTime + ((hireMoney == 20) ? 60 : 30);
+                    returnTimes[boatNumber] = returnTime;
+                }
+            } else {
+                cout << "Boat " << (boatNumber + 1) << " is not available until " << returnTimes[boatNumber] << endl;
+            }
+        } else {
+            cout << "Invalid boat number." << endl;
+        }
+
+        cout << "Do you want to hire another boat? (Y/N): ";
+        cin >> continueHiring;
+    } while (continueHiring == 'Y' || continueHiring == 'y');
+
+    // At the end of the day, output the report
+    endOfDayReport(moneyTaken, totalHoursHired);
+
+    return 0;
+}
+
+// Function to calculate the money taken for one boat hire
+int calculateMoneyForOneBoat() {
+    double hireTime;
+    char hireType;
+    int moneyTaken = 0;
+
+    cout << "Enter the duration of hire (1 or 0.5): ";
+    cin >> hireTime;
+    cout << "Enter the type of hire (F for full hour, H for half hour): ";
+    cin >> hireType;
+
+    if ((hireType == 'F' || hireType == 'f') && hireTime == 1) {
+        moneyTaken = 20;
+    } else if ((hireType == 'H' || hireType == 'h') && hireTime == 0.5) {
+        moneyTaken = 12;
+    } else {
+        cout << "Error: Invalid hire type or duration." << endl;
+        return -1;
+    }
+
+    return moneyTaken;
+}
+
+// Function to find the next available boat
+int findNextAvailableBoat(int returnTimes[], int currentTime) {
+    for (int i = 0; i < NUM_BOATS; ++i) {
+        if (returnTimes[i] <= currentTime) {
+            return i + 1; // Boat numbers are 1-based
+        }
+    }
+    return -1; // No boats are available at the current time
+}
+
+// Function to calculate the end of day report
+void endOfDayReport(int moneyTaken[], float totalHoursHired[]) {
+    int totalMoney = 0;
+    int totalTime = 0;
+    int boatsNotUsed = 0;
+    int mostUsedBoat = 0;
+    int maxHours = 0;
+
+    for (int i = 0; i < NUM_BOATS; ++i) {
+        totalMoney += moneyTaken[i];
+        totalTime += totalHoursHired[i];
+        if (totalHoursHired[i] == 0) {
+            boatsNotUsed++;
+        }
+        if (totalHoursHired[i] > maxHours) {
+            maxHours = totalHoursHired[i];
+            mostUsedBoat = i + 1;
+        }
+    }
+
+    cout << "Total money earned for all boats: $" << totalMoney << endl;
+    cout << "Total hours boats were hired: " << totalTime << endl;
+    cout << "Number of boats not used: " << boatsNotUsed << endl;
+    cout << "Boat used the most (boat number): " << mostUsedBoat << endl;
+}
