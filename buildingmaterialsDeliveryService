@@ -1,0 +1,121 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    // Declare variables to store sack information, order details, and pricing
+    char content;
+    float weight;
+    int c_sack, g_sack, s_sack, total_order, rej = 0, sp = 0;
+    float total_weight = 0.0, sp_price = 0.0, actual_price, discount_price, total_discount;
+
+    // Input the number of sacks for each type (cement, gravel, sand)
+     cout << "Enter the number of cement sacks: ";
+     cin >> c_sack;
+     cout << "Enter the number of gravel sacks: ";
+     cin >> g_sack;
+     cout << "Enter the number of sand sacks: ";
+     cin >> s_sack;
+
+    // Calculate the total number of sacks in the order
+    total_order = c_sack + g_sack + s_sack;
+
+    // Loop through each sack in the order
+    for (int count = 1; count <= total_order; ++count) {
+        // Prompt user to enter the content of a sack and provide an option to exit the loop
+         cout << "Enter the content of a sack (C for cement, G for gravel, S for sand, X to exit): ";
+         cin >> content;
+
+        // Check if the user wants to exit the loop
+        if (content == 'X' || content == 'x') {
+             cout << "Exiting the input loop." <<  endl;
+            break; // Exit the loop if 'X' or 'x' is entered
+        }
+
+        // Validate the weight of each sack based on its type (C, G, or S)
+        if (content == 'C') {
+            // Loop until a valid weight for the cement sack is entered
+            do {
+                 cout << "Enter weight of cement sack between 24.9KG and 25.1KG: ";
+                 cin >> weight;
+
+                // Reject the sack if the weight is outside the acceptable range
+                if (weight <= 24.9 || weight >= 25.1) {
+                     cout << "Cement sack is underweight or overweight. Rejected." <<  endl;
+                    ++rej;
+                } else {
+                    break; // Exit the loop if the weight is within the acceptable range
+                }
+
+            } while (true); // Infinite loop until a valid weight is entered
+        }
+        else if (content == 'G' || content == 'S') {
+            // Loop until a valid weight for the gravel or sand sack is entered
+            do {
+                 cout << "Enter weight of " << content << " sack between 49.0KG and 50.1KG: ";
+                 cin >> weight;
+
+                // Reject the sack if the weight is outside the acceptable range
+                if (weight <= 49.0 || weight >= 50.1) {
+                     cout << content << " sack is underweight or overweight. Rejected." <<  endl;
+                    ++rej;
+                } else {
+                    break; // Exit the loop if the weight is within the acceptable range
+                }
+
+            } while (true); // Infinite loop until a valid weight is entered
+        }
+        else {
+             cout << "Entered content is incorrect. Rejected." <<  endl;
+            ++rej;
+        }
+
+        // Accumulate the total weight of accepted sacks
+        total_weight += weight;
+        // Display the content and weight of the accepted sack
+         cout << "The content of sack is " << content <<  endl;
+         cout << "The weight of sack is " << weight << "KG" <<  endl;
+    }
+
+    // Display the total weight and the number of rejected sacks
+     cout <<  endl;
+     cout << "The total weight of the order is: " << total_weight <<  endl;
+     cout << "The number of sacks rejected is: " << rej <<  endl;
+
+    // Calculate the actual price of the order based on the regular prices
+    actual_price = (c_sack * 3) + (g_sack * 2) + (s_sack * 2);
+
+    // Check and calculate special packs if applicable
+    do {
+        if (c_sack >= 1 && g_sack >= 2 && s_sack >= 2) {
+            ++sp;
+            c_sack -= 1;
+            g_sack -= 2;
+            s_sack -= 2;
+        }
+        else {
+             cout << "Order is not a special pack, instead it is a regular order." <<  endl;
+        }
+
+    } while (c_sack > 0 && g_sack > 1 && s_sack > 1);
+
+    // Display information about special packs and calculate the total discount
+    if (sp >= 1) {
+        sp_price = sp * 10;
+         cout << "Total special packs are: " << sp <<  endl;
+         cout << "Price of special packs in dollars is: " << sp_price <<  endl;
+
+        discount_price = (c_sack * 3) + (g_sack * 2) + (s_sack * 2) + sp_price;
+
+         cout << "The actual price of the order is: " << actual_price <<  endl;
+         cout << "The discounted price of the order is: " << discount_price <<  endl;
+
+        total_discount = actual_price - discount_price;
+         cout << "Total discount in the order is: " << total_discount <<  endl;
+    }
+    else {
+         cout << "Price of the regular order in dollars is: " << actual_price <<  endl;
+    }
+
+    // Return 0 to indicate successful program execution
+    return 0;
+}
