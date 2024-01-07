@@ -1,0 +1,84 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+// TASK 2
+// Function to process donations
+void processDonation(string charityNames[], double charityTotals[]) {
+    int charityChoice;
+    double shoppingBill, donation;
+
+    cout << "\nEnter the number corresponding to your charity choice in cents (1, 2, 3): ";
+    cin >> charityChoice;
+
+    // Validate charity choice
+    if (charityChoice < 1 || charityChoice > 3) {
+        cout << "Invalid choice. Please choose a valid charity number.\n";
+        return;
+    }
+
+    cout << "Enter the value of the customer's shopping bill: ";
+    cin >> shoppingBill;
+
+    // Calculate donation (1% of shopping bill)
+    donation = shoppingBill * 0.01;
+
+    // Add donation to the appropriate charity total
+    charityTotals[charityChoice - 1] += donation;
+
+    // Output donation details
+    cout << fixed << setprecision(2);
+    cout << "Donation for " << charityNames[charityChoice - 1] << ": $" << donation << endl;
+}
+
+// TASK 3
+// Function to display totals
+void displayTotals(string charityNames[], double charityTotals[]) {
+    double grandTotal = 0.0;
+    cout << "\nTotals donated to each charity:\n";
+    for (int i = 0; i < 3; ++i) {
+        cout << charityNames[i] << ": $" << charityTotals[i] << endl;
+        grandTotal += charityTotals[i];
+    }
+    cout << "\nGRAND TOTAL DONATED TO CHARITY: $" << grandTotal << endl;
+}
+
+int main() {
+	// TASK 1 - setting up routine
+    // Variable declarations
+    string charityNames[3];
+    double charityTotals[3] = {0.0, 0.0, 0.0}; // Initialize totals to zero
+    int charityChoice;
+    double shoppingBill, donation;
+
+    // Input charity names
+    cout << "Enter the names of three charities:\n";
+    for (int i = 0; i < 3; ++i) {
+        cout << "Charity " << (i + 1) << ": ";
+        getline(cin, charityNames[i]);
+    }
+
+    // Display charity names
+    cout << "\nAvailable charities for donation:\n";
+    for (int i = 0; i < 3; ++i) {
+        cout << i + 1 << ". " << charityNames[i] << endl;
+    }
+    
+    // TASK 2 - process donation
+    processDonation(charityNames, charityTotals);
+    
+    // TASK 3
+    char continueDonating;
+    do {
+        processDonation(charityNames, charityTotals);
+        cout << "Continue donating? (y/n): ";
+        cin >> continueDonating;
+    } while (continueDonating == 'y' || continueDonating == 'Y');
+
+    // Display totals when finished
+    displayTotals(charityNames, charityTotals);
+
+    return 0;
+}
